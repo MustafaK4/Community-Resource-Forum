@@ -13,7 +13,7 @@ export async function GET(
   const dateTo = params.get("dateTo"); //yyyy-mm-dd
   const commentCountParam = params.get("commentCount");
   const flag = params.get("flag");
-
+  const sortBy = params.get("sortBy");
 
   if (!term) {
     return NextResponse.json(
@@ -28,7 +28,6 @@ export async function GET(
       .from(posts)
       .where(sql`MATCH(${posts.content}) AGAINST(${term})`);
 
-   
     let filtered = results;
 
     if (dateFrom) {
@@ -56,7 +55,7 @@ export async function GET(
       const f = String(flag).trim();
       if (f.length > 0) {
         filtered = filtered.filter((p) => {
-          const flagsField = (p as any).flags ?? "";  
+          const flagsField = (p as any).flags ?? "";
           return String(flagsField).includes(f);
         });
       }
